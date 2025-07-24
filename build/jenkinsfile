@@ -48,7 +48,7 @@ pipeline {
         }
         stage("build Image"){
             steps{
-                sh "docker build -t villaimage:${BUILD NUMBER} ."
+                sh "docker build -t villaimage:${BUILD_NUMBER} ."
             }
         }
 
