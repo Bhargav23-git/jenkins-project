@@ -48,13 +48,13 @@ pipeline {
         }
         stage("build Image"){
             steps{
-                sh "docker build -t villaimage:${BUILD_NUMBER} ."
+                sh "docker build -t villaimage ."
             }
         }
 
         stage("Scan Image Trivy"){
             steps{
-                sh "trivy image villaimage:${BUILD_NUMBER} >> /tmp/trivyscan.txt "
+                sh "trivy image villaimage >> /tmp/trivyscan.txt "
             }
         }
 
