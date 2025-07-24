@@ -65,7 +65,7 @@ pipeline {
                 sh " docker image rm -f bhargavrathod/villaimage:${BUILD_NUMBER} "
             }
         }
-        stage(Release Container){
+        stage("Release Container"){
             steps {
                 sh "docker run -dit --name villa-container -p 8088:80 bhargavrathod/villaimage:${BUILD_NUMBER}"
             }
