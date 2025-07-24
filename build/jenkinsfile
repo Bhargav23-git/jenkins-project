@@ -23,7 +23,7 @@ pipeline {
         stage("Sonar Analysis"){
             steps{
               dir('src/') {
-                withSonarQubeEnv('sonar-server') {
+                withSonarQubeEnv('sonar-scanner') {
                     sh ''' $SSHOME/bin/sonar-scanner \
                     -Dsonar.projectKey=villa-agency-project-ci \
                     -Dsonar.projectName=villa-agency-project-ci '''  
