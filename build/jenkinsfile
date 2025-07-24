@@ -15,19 +15,8 @@ pipeline {
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'kubernetes', url:pipeline {
-    agent {
-        label 'agent'
-    }
-    options{
-        timeout(time: 1, unit: 'HOURS')
-        buildDiscarder(logRotator(numToKeepStr: '3')) 
-    }
-
-    stages {
-        stage("App code checkout"){
-            steps {
                 git branch: 'day1', url:'https://github.com/Bhargav23-git/jenkins-project.git'
+
             }
         }
 
