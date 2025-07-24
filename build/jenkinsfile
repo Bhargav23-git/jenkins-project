@@ -57,17 +57,13 @@ pipeline {
                 sh "trivy image villaimage >> /tmp/trivyscan.txt "
             }
         }
-
-        stage("ImagePush") {
+        stage("Image Push to Registry"){
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'docker_user', passwordVariable: 'docker_pass')]) {
-                    sh "docker tag villaimage ${env.docker_user}/villaimage:${BUILD_NUMBER}"
-                    sh "docker login -u ${env.docker_user} -p ${env.docker_pass}"
-                    sh "docker push ${env.docker_user}/villaimage:${BUILD_NUMBER}"
-                    }
-                }
+                sh "docker tag villaimage:${BUILD_NUMBER} bhargavrathod/villaimage:${BUILD_NUMBER} "
+                sh " docker login -u $DOKCER_REGISTRY_CREDS_USR -p $DOKCER_REGISTRY_CREDS_PSW "
+                sh " docker push bhargavrathod/villaimage:${BUILD_NUMBER} "
+                sh " docker image rm -f bhargavrathod/villaimage:${BUILD_NUMBER} "
             }
-        }
+        } 
     }
 }
