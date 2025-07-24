@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'day1', url:'https://github.com/Bhargav23-git/jenkins-project.git'
+                git branch: 'kubernates', url:'https://github.com/Bhargav23-git/jenkins-project.git'
 
             }
         }
