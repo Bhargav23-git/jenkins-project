@@ -67,7 +67,7 @@ pipeline {
         }
         stage(Release Container){
             steps {
-                sh "docker run -dit --name villa-container -p 8088:80 bhargavrathod/villaimage:$(BUILD_NUMBER)"
+                sh "docker run -dit --name villa-container -p 8088:80 bhargavrathod/villaimage:${BUILD_NUMBER}"
             }
         }
 
