@@ -1,0 +1,8 @@
+[defaults]
+inventory = ./inventory
+
+[privilege_escalation]
+bechome = yes
+bechome_ask_pass = false
+bechome_method = sudo
+bechome_user = root

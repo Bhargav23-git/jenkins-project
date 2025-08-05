@@ -6,70 +6,20 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
         buildDiscarder(logRotator(numToKeepStr: '3'))
     }
-
-    environment {
-        SSHOME = tool 'sonar-scanner'
-        DOKCER_REGISTRY_CREDS = credentials('docker-creds')
-    }
-
+ 
     stages {
         stage("App code Checkout"){
             steps {
-                git branch: 'kubernates', url:'https://github.com/Bhargav23-git/jenkins-project.git'
-
+                git branch: 'ansible', url:'https://github.com/Bhargav23-git/jenkins-project.git'
             }
         }
 
-        stage("Sonar Analysis"){
-            steps{
-              dir('src/') {
-                withSonarQubeEnv('sonar-scanner') {
-                    sh ''' $SSHOME/bin/sonar-scanner \
-                    -Dsonar.projectKey=villa-agency-project-ci \
-                    -Dsonar.projectName=villa-agency-project-ci '''  
-                }
-              }
-            }
-        }
-
-        stage('QualityGate') {
+        stage('Deploy Ansible Playbook') {
             steps {
-                script {
-                    dir('src/') {
-                        waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
-                    }
-                }
+              dir('ansible-project/'){  
+                sh ' ansible-playbook playbook.yaml '
+              } 
             }
         }
-        stage("Scan CODEFS"){
-            steps{
-                sh "trivy fs src/ >> /tmp/trivyscanfs.txt "
-            }
-        }
-        stage("build Image"){
-            steps{
-                sh "docker build -t villaimage:${BUILD_NUMBER} ."
-            }
-        }
-
-        stage("Scan Image Trivy"){
-            steps{
-                sh "trivy image villaimage >> /tmp/trivyscan.txt "
-            }
-        }
-        stage("Image Push to Registry"){
-            steps {
-                sh "docker tag villaimage:${BUILD_NUMBER} bhargavrathod/villaimage:${BUILD_NUMBER} "
-                sh " docker login -u $DOKCER_REGISTRY_CREDS_USR -p $DOKCER_REGISTRY_CREDS_PSW "
-                sh " docker push bhargavrathod/villaimage:${BUILD_NUMBER} "
-                sh " docker image rm -f bhargavrathod/villaimage:${BUILD_NUMBER} "
-            }
-        }
-        stage("Release Container"){
-            steps {
-                sh "docker run -dit --name villa-container -p 8088:80 bhargavrathod/villaimage:${BUILD_NUMBER}"
-            }
-        }
-
     }
-}
+}            
